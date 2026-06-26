@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const { redirectToOriginal } = require('./controllers/redirect.controller');
 require('dotenv').config();
+
 
 const urlRoutes = require('./routes/url.routes');
 const redirectRoute = require('./routes/redirect.routes');
@@ -31,7 +33,7 @@ app.use('/api/', limiter);
 
 // Routes
 app.use('/api/urls', urlRoutes);
-app.use('/', redirectRoute); // short link redirect: GET /:code
+app.get('/:code', redirectToOriginal); // short link redirect: GET /:code
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
